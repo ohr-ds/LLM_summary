@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "text_anal"
+version = "0.1.0"
+description = "Applying Hierarchical Dirichlet Process & Sentiment Analysis to the text data crawled"
+authors = ["Edward Oh <edward.oh@nexr.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+openai = "^1.35.1"
+openpyxl = "^3.1.4"
+nltk = "^3.8.1"
+konlpy = "^0.6.0"
+gensim = "4.3.0"
+scipy = "1.10.1"
+matplotlib = "^3.9.0"
+requests = "^2.32.3"
+pyyaml = "^6.0.1"
+pyperclip = "^1.9.0"
+ipywidgets = "^8.1.3"
+tqdm = "^4.66.4"
+python-dotenv = "^1.0.1"
+jsonlines = "^4.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
