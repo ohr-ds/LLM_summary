@@ -272,7 +272,6 @@ gptapi:
         "theme2": [issue3, issue4, ...],
       }
       4. 하나의 theme 내에 중복된 issue가 있으면 안된다.
-      5. 모든 issues는 theme에 속해야 한다.
 
       </지시사항>
     few_shot_examples: |
