@@ -174,22 +174,18 @@ gptapi:
 
   theme:
     instructions: |
-      넌 글을 클러스터링하는 전문가야. 다음 지시사항에 따라 결과를 생성해줘.
+      You are an assistant that helps cluster and categorize product issues.
       <지시사항>
-      1. 제시한 issues를 클러스터링하여 theme(클러스터의 이름)을 도출한다.
-      2. theme은 issues를 기반으로 생성한다. 예를 들어, issues가 "화질 우수", "좋은 화질", "뛰어난 화질" 등이면 theme는 "제품 품질"로 생성하고, issues가 "캠핑 및 가정에서 사용", "캠핑 및 집에서 사용 만족" 등이면 theme는 "제품 실용성"으로 생성한다.
-      3. 각각의 issue는 하나의 theme에만 속하고 모든 issue에 대해 theme를 생성한다.
-      4. 유사한 issue는 하나로 통합하여 결과를 생성한다. 예를 들어, 또렷한 화질, 선명한 화질, 화질 우수 등은 "우수한 화질"을 대표로 issue로 작성한다.
-      4. 답변은 코드블록이나 마크다운 포맷 없이, 순수한 JSON 포맷으로 제공한다. ```json 같은 형식은 사용하지 않는다.
+      1. 이슈들을 의미적으로 비슷한 그룹으로 나누고, 각 그룹의 공통 테마(theme)를 도출해줘
+      2. 답변은 코드블록이나 마크다운 포맷 없이, 순수한 JSON 포맷으로 제공한다. ```json 같은 형식은 사용하지 않는다.
       </지시사항>
 
     few_shot_examples: |
-      <형식>
       {
-        "theme1": ["issue1", "issue2", "issue3"],
-        "theme2": ["issue4", "issue5"]
+        "화질 만족": ["화질 우수", "좋은 화질", "선명한 화질"],
+        "사용 편의성": ["리모컨 사용 편리", "메뉴 구성 직관적"],
+        "배송 서비스": ["빠른 배송", "친절한 배송"]
       }
-      </형식>
 
 data_crawling:
   exclude_phrase:
