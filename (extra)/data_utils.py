@@ -42,18 +42,6 @@ def convert_to_dict(content):
         print(f"Error decoding JSON: {e}")
         return None
 
-# 이슈 목록을 테마와 매핑하는 함수
-def map_issues_to_themes(issues_list, clustering_response):
-    themes = []
-    for issues in issues_list:
-        issue_themes = set()  # 중복 방지를 위한 set 사용
-        for issue in issues:
-            for theme, issue_group in clustering_response.items():
-                if issue in issue_group:
-                    issue_themes.add(theme)
-        themes.append(", ".join(issue_themes))  # 여러 테마가 있을 경우 ,로 결합
-    return themes
-
 # 리스트, 딕셔너리 형태를 문자열로 변환하는 후처리 함수
 def clean_format(value):
     if isinstance(value, list):

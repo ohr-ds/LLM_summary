@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from collections import defaultdict
 
-def get_response(messages):
+def get_response(client, messages):
     """
     model: 모델 종류
     messages: 사용자의 입력과 모델의 출력을 교환하는 메시지 목록
@@ -100,7 +100,7 @@ def clean_format(value):
         return ', '.join([f"{k}: {v}" for k, v in value.items()])  # 딕셔너리의 경우 key: value 형식으로 변환
     return value  # 이미 문자열인 경우는 그대로 반환
 
-def classify_issues(issues):
+def classify_issues(client, theme_instructions, issues, theme_few_shots):
     # 'instructions'는 모델의 행동 방침을 설정하므로 system 메시지에 포함
     messages = [
         {"role": "system", "content": theme_instructions},
@@ -108,7 +108,7 @@ def classify_issues(issues):
         {"role": "user", "content": f"예시: {theme_few_shots}"}
     ]
     
-    return get_response(messages)
+    return get_response(client, messages)
 
 # themes 리스트의 각 JSON 문자열을 dict 형태로 변환하여 병합하는 함수
 def merge_themes(themes):
