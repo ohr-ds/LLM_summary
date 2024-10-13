@@ -17,15 +17,26 @@ from dotenv import load_dotenv
 from collections import defaultdict
 
 '''
-*사용 예시: python integ_gpt_analysis.py data/제공/제공_네이버쇼핑리뷰.csv 내용
+*사용 예시: python integ_gpt_analysis.py data/제공/제공_네이버쇼핑리뷰.csv 내용 제공_네이버쇼핑리뷰
+결과: 
+result/에 S1_감성분석_제공_네이버쇼핑리뷰.pkl
+result/에 S1_감성분석_제공_네이버쇼핑리뷰.xlsx
+result/에 S2_감성테마_제공_네이버쇼핑리뷰.pkl
+result/에 S2_감성테마_제공_네이버쇼핑리뷰.xlsx
+result/에 S3_기회영역값_제공_네이버쇼핑리뷰.xlsx
+'''
+
+'''
 args.file_path = 'data/제공/제공_네이버쇼핑리뷰.csv'
 args.column_name = '내용'
+args.output = '제공_네이버쇼핑리뷰'
 '''
 
 # input 파일명, 컬럼이름 파싱
 parser = argparse.ArgumentParser(description='CSV 파일 경로와 컬럼 이름을 입력받기')
 parser.add_argument('file_path', type=str, help='CSV 파일 경로')
 parser.add_argument('column_name', type=str, help='분석할 컬럼 이름')
+parser.add_argument('output', type=str, help='결과 파일 이름')
 args = parser.parse_args()
 
 # .env 파일에서 환경 변수 로드(API 키)
@@ -60,7 +71,7 @@ text_apply = df[args.column_name]
 content_list = []
 
 total_iterations = len(text_apply)
-
+print("핵심 구문 추출&감정 분석 진행 중...")
 with tqdm(total=total_iterations) as pbar:
     for i, text in enumerate(text_apply):
 
@@ -109,10 +120,17 @@ for content, original_raw_text in content_list:
 
 result_s1 = pd.DataFrame(data_list)
 
+# result 폴더 없을 경우 생성
+if not os.path.exists('result'):
+    os.makedirs('result')
+
+output_name_s1 = f"S1_감성분석_{args.output}"
+output_name_s2 = f"S2_감성테마_{args.output}"
+output_name_s3 = f"S3_기회영역값_{args.output}"
 
 # 결과 중간 저장
-result_s1.to_pickle('result/제공_네이버쇼핑리뷰_S1_감성분석.pkl')
-result_s1.to_excel('result/제공_네이버쇼핑리뷰_S1_감성분석.xlsx', index=False)
+result_s1.to_pickle(f"result/{output_name_s1}.pkl")
+result_s1.to_excel(f"result/{output_name_s1}.xlsx", index=False)
 
 ####################################################
 ## Step 2) 군집 분석(Clustering Analysis)
@@ -126,7 +144,8 @@ unique_issues = result_s1['issue'].drop_duplicates().tolist()
 # 유니크한 이슈들을 GPT API로 분류
 themes = []
 batch_size = 100  # 한번에 너무 많은 데이터를 보내지 않기 위해 배치 처리
-for i in range(0, len(unique_issues), batch_size):
+print("군집분석 진행 중...")
+for i in tqdm(range(0, len(unique_issues), batch_size)):
     batch_issues = unique_issues[i:i+batch_size]
     themes.append(classify_issues(client, theme_instructions, ', '.join(batch_issues), theme_few_shots))
 
@@ -149,17 +168,21 @@ result_s2['tid'] = ['text' + str(i+1).zfill(4) for i in unique_ids]
 result_s2 = result_s2[['tid'] + [col for col in result_s2.columns if col != 'tid']]
 
 # 중간 저장
-result_s2.to_pickle('result/제공_네이버쇼핑리뷰_S2_감성테마.pkl')
-result_s2.to_excel('result/제공_네이버쇼핑리뷰_S2_감성테마.xlsx', index = False)
+result_s2.to_pickle(f"result/{output_name_s2}.pkl")
+result_s2.to_excel(f"result/{output_name_s2}.xlsx", index=False)
 
 ####################################################
 ## Step 3) 기회영역값 도출(Opportunity Score Extraction)
 ####################################################
-
 # 'issue'별 'sentiment' 개수 계산 및 'total' 컬럼 추가 후 내림차순 정렬
+
 result_s3 = result_s2.groupby(['issue', 'theme', 'sentiment']).size().unstack(fill_value=0)
 result_s3['total'] = result_s3.sum(axis=1)
 result_s3 = result_s3.sort_values(by='total', ascending=False)
+result_s3 = result_s3.reset_index()
 
 # 엑셀 파일로 저장
-result_s3.to_excel('result/제공_네이버쇼핑리뷰_S3_기회영역값.xlsx')
+result_s3.to_excel(f"result/{output_name_s3}.xlsx", index=False)
+
+print("분석이 완료되었습니다.")
+os.system('say "분석이 완료되었습니다."')
