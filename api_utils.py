@@ -112,22 +112,25 @@ def classify_issues(client, theme_instructions, issues, theme_few_shots):
 
 # themes 리스트의 각 JSON 문자열을 dict 형태로 변환하여 병합하는 함수
 def merge_themes(themes):
-    merged_dict = defaultdict(list)  # 리스트를 기본값으로 갖는 defaultdict 생성
+    merged_dict = defaultdict(list) # 각 테마에 대해 기본값이 빈 리스트인 딕셔너리 생성
 
     for theme in themes:
-        # JSON 문자열을 Python dict로 변환
+        # JSON 문자열을 파이썬 딕셔너리로 변환
         theme_dict = json.loads(theme)
         
-        # 각 key와 value를 병합
+        # 변환된 딕셔너리에서 테마(key)와 이슈(value)를 병합
         for key, values in theme_dict.items():
+            # 각 이슈(value)를 테마(key)에 추가(중복된 이슈는 추가하지 않음)
             for value in values:
                 if value not in merged_dict[key]:  # 중복된 value가 없을 경우만 추가
                     merged_dict[key].append(value)
-    
-    return dict(merged_dict)  # defaultdict을 일반 dict로 변환하여 반환
+    # 병합 결과를 일반 딕셔너리로 변환하여 반환
+    return dict(merged_dict)
 
 # 'theme' 컬럼을 생성하는 함수(이슈를 테마로 매핑)
 def find_theme(merged_themes, issue):
+    # 이슈가 첫 번째로 발견된 테마에 매핑
+    # todo: 로직 개선 필요
     for theme, issues in merged_themes.items():
         if issue in issues:
             return theme
