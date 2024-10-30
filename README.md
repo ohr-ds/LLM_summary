@@ -19,6 +19,8 @@
 ```bash
 python integ_gpt_analysis.py [파일경로] [컬럼명] [결과파일명]
 ```
+![image](https://github.com/user-attachments/assets/af936d89-5678-4b93-84ae-02ce40eb8ce2)
+
 폴더 내 result 폴더가 생성되며 결과파일명으로 저장됩니다.
 
 ## 기타
