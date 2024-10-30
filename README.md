@@ -9,7 +9,10 @@
   - 결과물: theme, tid
 - 기회영역값 도출(Opportunity Score Extraction)
   - 결과물: issue별 긍정, 부정, 중립 개수
- 
+
+## 공개여부
+private 프로젝트로 공개되지 않았습니다. 공급기업과 수요기업에만 공개합니다.
+
 ## 설치 방법
 1. python 3.10.13버전
 2. git clone 또는 zip 파일 형태 다운로드
