@@ -44,7 +44,7 @@ load_dotenv()
 
 # YAML 파일 열기
 yaml_path = 'config.yaml'
-with open(yaml_path, 'r') as f:
+with open(yaml_path, 'r', encoding='utf-8') as f:
     config = yaml.safe_load(f)
 
 # gpt prompt 설정
@@ -185,4 +185,7 @@ result_s3 = result_s3.reset_index()
 result_s3.to_excel(f"result/{output_name_s3}.xlsx", index=False)
 
 print("분석이 완료되었습니다.")
-os.system('say "분석이 완료되었습니다."')
+if os.name == 'nt':
+    pass
+else:
+    os.system('say "분석이 완료되었습니다."')
