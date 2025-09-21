@@ -2,7 +2,7 @@
 name = "text_anal"
 version = "0.1.0"
 description = "Applying Hierarchical Dirichlet Process & Sentiment Analysis to the text data crawled"
-authors = ["Edward Oh <edward.oh@nexr.com>"]
+authors = ["Heungrok Oh <heungrokoh@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
